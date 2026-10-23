@@ -70,4 +70,46 @@ group by country;
 
 select a.agent_id, a.first, a.last
 from agent a
-where exists ()
+where exists (
+			select 1
+			from teamrel tr
+			join mission m ON tr.team_id = m.team_id
+			join securityclearance sc on m.access_id = sc.sc_id 
+			where sc.sc_level = 'Majestic'
+			and a.agent_id = tr.agent_id);
+
+select a.agent_id, a.first, a.last
+from agent a
+where a.agent_id in (
+					select tr.agent_id
+					from teamrel tr
+					join mission m ON tr.team_id = m.team_id
+					join securityclearance sc on m.access_id = sc.sc_id 
+					where sc.sc_level = 'Majestic');
+
+
+-- 7. Locate the skill(s) held by the most agents and for those
+-- skills, output the number of agents with that skill. (The
+-- result table should include skills, which are held by most
+-- agents, and the number of agents with those skills.)
+
+select s.skill, count(sr.agent_id) as count
+from skill s
+join skillrel sr on s.skill_id = sr.skill_id
+group by s.skill_id, s.skill
+order by count desc;
+
+select s.skill, count(s)
+from skill s join skillrel sr
+on sr.skill_id = s.skill_id
+group by s.skill
+having count(s) =  (
+	select count(*) as c
+	from skill s1 join skillrel sr1
+	on sr1.skill_id = s1.skill_id
+	group by s1.skill
+	order by c desc
+	limit 1
+);
+
+
