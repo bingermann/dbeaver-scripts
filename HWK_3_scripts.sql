@@ -113,3 +113,32 @@ having count(s) =  (
 );
 
 
+-- Views --
+
+-- Write an SQL view definition that displays agent 
+-- names(first, last), the affiliation they belong 
+-- to  and the description of the affiliation(s). 
+-- Show your view definition and the first 5 rows 
+-- returned when you SELECT * from the view with a 
+-- screenshot of the result. 
+
+create view AgentView as
+select a.first, a.last, af.title, af.description
+from agent a join affiliationrel ar on a.agent_id = ar.agent_id
+join affiliation af on af.aff_id = ar.aff_id;
+select * from AgentView;
+
+
+-- Write an SQL view definition that displays a unique 
+-- mission (name), the team(name) that performed this 
+-- mission and the text of the missions security 
+-- clearance level (access id) and description. Show 
+-- your view definition and the first 5 rows returned 
+-- when you SELECT * from the view with a screenshot of 
+-- the result. 
+
+create view MissionView as
+select m.name, t.name as teamName, sc.sc_level, sc.description
+from team t join mission m on t.team_id = m.team_id
+join securityclearance sc on m.access_id = sc.sc_id;
+select * from MissionView;
