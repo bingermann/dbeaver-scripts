@@ -46,7 +46,7 @@ select * from musician;
 
 
 
-create table genre (genre text unique);
+create table genre (genre text primary key);
 
 select * from genre;
 
